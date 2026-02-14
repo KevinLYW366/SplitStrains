@@ -10,7 +10,7 @@ set -e
 ####################################
 #### Paths to refs and software ####
 ####################################
-export TRIMMOMATIC_PATH=~/bin/Trimmomatic-0.36/trimmomatic-0.36.jar
+export TRIMMOMATIC_PATH=/opt/conda/envs/SplitStrains/share/trimmomatic-0.40-0/trimmomatic.jar
 
 export refDir=refs                                    # directory for all references references
 # export REF_PATH=${refDir}/tuberculosis-mixInfect-ref.fasta

@@ -381,7 +381,8 @@ def getIntervals(gffFilePath, regionStart, regionEnd):
 
         # parse only gene regions and repeat_regions
         feature = lineParams[2]
-        if feature != 'gene' and feature != 'repeat_region':
+        # if feature != 'gene' and feature != 'repeat_region':
+        if feature != 'gene':
             continue
 
         # try getting region
@@ -765,7 +766,7 @@ if __name__ == "__main__":
     parser.add_argument('-fe', metavar='n', default=0, dest='entropy_thresh', help='Entropy filtering threshold. Set to 0 to turn off entropy filtering. Default=0.')
     parser.add_argument('-a', metavar='n', default=0.05, dest='alpha_level', help='Significance level alpha. The probability of rejecting a single strain hypothesis when it is true. Default=0.05.')
     parser.add_argument('-fes', metavar='n', type=int, default=70, dest='entropy_step', help='Entropy filtering step. Defines the step length on freqVec.csv for entropy filtering computation. Default=200.')
-    parser.add_argument('-fd', metavar='n', required=True, default=75, dest='depthThreshold', type=int, help='Do not consider pileup columns with the depth percentage less than n percent. Setting this to 75 means ignore sites with depth coverage less than 75% of the bam avg depth. Default=75.')
+    parser.add_argument('-fd', metavar='n', required=True, default=75, dest='depthThreshold', type=int, help='Do not consider pileup columns with the depth percentage less than n percent. Setting this to 75 means ignore sites with depth coverage less than 75 percent of the bam avg depth. Default=75.')
     parser.add_argument('-u', metavar='n', type=int, default=90, dest='upperLimit', help='Do not consider proportion of bases beyond n value. Default=90.')
     parser.add_argument('-l', metavar='n', type=int, default=10, dest='lowerLimit', help='Do not consider proportion of bases below n value. Default=10.')
     # This were prev values mapq = 40 and baseq = 15
@@ -881,7 +882,9 @@ if __name__ == "__main__":
     avgDepth = freqVec[:,-1].mean()
     minDepth = avgDepth * depthThreshold / 100
 
+    freqVecFilterCSV = 'freqVec.filter.csv'
     freqVec, entropyVec = filterVec(freqVec, minDepth, ethreshold, entropy_step, lowerLimit, upperLimit)
+    np.savetxt(f'{outputDir}/{freqVecFilterCSV}', freqVec, delimiter=',')
     plotScatter(outputDir, freqVec, originalFreqVec, plotName, entropyVec, regionStart, regionEnd, lowerLimit, upperLimit)
 
 

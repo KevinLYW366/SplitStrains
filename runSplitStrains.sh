@@ -35,7 +35,7 @@ sampleBAM_out=${SAMPLE_PATH}/aligned/trimmed-${id}.sorted.bam
 
 if [ $doAlignment == 1 ]
 then
-    adapter=/home/user1/bin/Trimmomatic-0.36/adapters/TruSeq3-PE-2.fa
+    adapter=/opt/conda/envs/SplitStrains/share/trimmomatic-0.40-0/adapters/TruSeq3-PE-2.fa
     echo "########################### trimming start: ###############################"
     java -jar $TRIMMOMATIC_PATH PE -phred33 $SAMPLE_PATH/$sampleR1 $SAMPLE_PATH/$sampleR2 \
         $sampleR1_trimmed $sampleR1_trimmed.se \
