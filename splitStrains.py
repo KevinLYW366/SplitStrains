@@ -848,6 +848,7 @@ if __name__ == "__main__":
         # terminate if freqVec has less than 2 entries
         if freqVec.size < 2:
             logging.warning('No SNPs found on the given interval.')
+            writeResult(bamFilePath, 0, 0, alpha_level, [1])
             exit()
 
         # write freqVec to a file
@@ -891,13 +892,15 @@ if __name__ == "__main__":
     num_iter = 20
     init_p = 0.7
     init_err = 0.001
+    thresh = 0
+    LR = 0
 
     freqVec = freqVec[np.max(freqVec[:,:4], axis=1) < upperLimit]
 
     # call single strain if not enough variation is found
     if len(freqVec) < 5:
         logging.info(f'Not enough variant sites.')
-        writeResult(bamFilePath, 0 , 0, alpha_level, [1])
+        writeResult(bamFilePath, LR , thresh, alpha_level, [1])
         exit()
 
     # test null and alt hypthesis
@@ -935,6 +938,7 @@ if __name__ == "__main__":
     for p in init_proportions:
         if np.isclose(p,0):
             logging.error('Unable to fit the data. Check if depth filtering, entropy filtering or intervals are reasonable.')
+            writeResult(bamFilePath, LR, thresh, alpha_level, [1])
             exit()
 
 
@@ -962,6 +966,7 @@ if __name__ == "__main__":
     if components == 2:
         if (means[0] > 50 and means[1] > 50) or (means[0] < 50 and means[1] < 50):
             logging.warning(f'result: Could not fit the data {bamFilePath}. Incorrect means:{means[0]}, {means[1]}. Possibly 50:50 split.')
+            writeResult(bamFilePath, LR, thresh, alpha_level, [1])
             exit()
 
     writeResult(bamFilePath, LR , thresh, alpha_level, means/np.sum(means))
